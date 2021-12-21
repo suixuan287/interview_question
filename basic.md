@@ -22,3 +22,25 @@ js是可以操作dom的，如果同时修改元素属性并同时渲染页面，
 因此当js引擎线程执行时gui渲染引擎会被挂起
 
 ### Event Loop
+任务分为宏任务和微任务  
+会把宏任务和微任务添加到宏任务队列和微任务队列中  
+执行一个宏任务过程中如果遇到微任务，就将它添加到微任务队列中  
+宏任务执行完毕后，立即执行当前微任务队列中的所有微任务  
+当前宏任务执行完毕后，开始检查渲染，然后GUI线程接管渲染  
+渲染完毕后，js线程继续接管，开始下一个宏任务
+
+### 宏任务、微任务有哪些
++ 宏任务：主代码块、setTimeout、setInterval等
++ 微任务：promise、process.nextTick等
+
+
+### webpack构建优化
++ 分包：设置externals，将react, react-dom等基础包通过cdn引入
++ 分离基础脚本，使用dllPlugin和dllReferencePlugin将不经常更新的模块提前构建，每次构建只针对有变化的模块
++ 缩小构建范围，loader不解析node_modules
++ 
+
+### 图片加载优化
+使用window.addEventListener捕捉error事件，然后把默认图片赋值给target
+
+
