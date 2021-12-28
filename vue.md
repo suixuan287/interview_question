@@ -74,3 +74,14 @@ ie8以下浏览器不支持
 剩下的就是一些前端通用的手段：loading,骨架屏等等
 
 ### vue的diff算法
+
+
+### defineProperty的缺陷
++ 无法监听数组
++ 无法监听对象
+
+### vue组件间通信
++ props emit
++ vuex
++ inject provide
++ eventBus

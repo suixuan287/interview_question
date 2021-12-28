@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            const obj = {};
+            const newObj = new Proxy({}, {
+                get (target, key) {
+                    console.log('=====get', key)
+                    return Reflect.get(target, key)
+                },
+                set (target, key, value) {
+                    if (key == 'text') {
+                        document.getElementById('div').innerHTML = value;
+                    }
+                    return Reflect.set(target, key, value)
+                }
+            })
+
+            document.getElementById('input').addEventListener('keyup', e => {
+                newObj.text = e.target.value
+            })
+
+        </script>
+    </body>
+</html>

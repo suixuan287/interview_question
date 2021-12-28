@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            const a = function() {
+                this.b = 2;
+                this.c = 1;
+            }
+            a.prototype.getbc = function() {this.b};
+
+            b = new a()
+            console.log(b)
+
+        </script>
+    </body>
+</html>

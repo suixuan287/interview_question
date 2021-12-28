@@ -44,3 +44,7 @@ js是可以操作dom的，如果同时修改元素属性并同时渲染页面，
 使用window.addEventListener捕捉error事件，然后把默认图片赋值给target
 
 
+
+
+
+
