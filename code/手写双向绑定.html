@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            const obj = {text: ''};
+            Object.defineProperty(obj, 'text', {
+                get() {
+                    console.log('======get value')
+                },
+                set(val) {
+                    document.getElementById('div').innerHTML = val;
+                }
+            })
+
+            document.getElementById('input').addEventListener('keyup', e => {
+                obj.text = e.target.value
+            })
+
+        </script>
+    </body>
+</html>

@@ -77,3 +77,12 @@ ie8以下浏览器不支持
 
 
 ### Proxy
+### defineProperty的缺陷
++ 无法监听数组
++ 无法监听对象
+
+### vue组件间通信
++ props emit
++ vuex
++ inject provide
++ eventBus
