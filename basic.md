@@ -35,13 +35,64 @@ js是可以操作dom的，如果同时修改元素属性并同时渲染页面，
 
 
 ### webpack构建优化
-+ 分包：设置externals，将react, react-dom等基础包通过cdn引入
++ 分包：设置externals，将react, react-dom等基础包通过cdn引入和externals
 + 分离基础脚本，使用dllPlugin和dllReferencePlugin将不经常更新的模块提前构建，每次构建只针对有变化的模块
 + 缩小构建范围，loader不解析node_modules
-+ 
++ 开发环境不做目录内容清理，计算文件hash，提取css文件等
++ babel-loader开启缓存（加上cacheDirectory: true或使用transform-runtime插件）
++ 使用commonsChunkPlugin提取公共模块
++ 使用noParse 排除不需要解析的模块
++ 使用模块化引入 import xx form 'x/xx'
 
 ### 图片加载优化
 使用window.addEventListener捕捉error事件，然后把默认图片赋值给target
+
+### 跨域原理
+跨域是指浏览器不能执行其他网站的脚本。它是由浏览器的同源策略造成的，是浏览器对js实施的安全限制  
+地址A加载的页面，不能访问地址B的服务， AB不同源。  
+同源：域名、协议、端口均相同
+
+
+### 跨域解决方法
++ jsonp
++ 通过修改document.domain来跨子域  
+A页面通过iframe嵌入了B页面，两个页面是同主域的，这时可以同时设置两个页面的document.domain为主域。
+可能两个页面的domain就是一致，但是必须显示地设置domain
++ 使用window.name window.name只能是字符串，最大2m
++ window.postMessage方法 接收端使用 window.onmessage方法接受
++ CORS 
+
+### CORS
+cors是跨域资源共享，是一种ajax跨域请求资源的方式。仅支持IE10以上  
+cors需要浏览器和服务器同时支持。  
+其实整个cors通信过程，都是浏览器自动完成，不需要用户参与。浏览器一单发现ajax跨域，就会自动添加一些附加的header信息。实现cors通信的关键是服务器。  
+cors请求分为两种，简单请求(simple request)和非简单请求(not-so-simple request)
++ 简单请求：
+    - 方法：head,get,post
+    - header信息有只有以下几种：Accept, Accept-Language, Content-Language, Last-Event-ID, Content-Type
+    过程：浏览器发送cors请求，会在header中增加 origin: a.com, 如果服务器接收这个请求，就在Access-Control-Allow-Origin头部回发同样的源信息 Access-Control-Allow-Origin: a.com  
+    ps: 如果origin不在允许范围内，服务器会返回一个正常的http回应，这种错误无法通过状态码识别，因为http请求状态码可能是200  
+    服务器响应的header信息里有以下字段：  
+        * Access-Control-Allow-Origin: 必须；如果是* 表示接受任意域名的请求
+        * Access-Control-Allow-Credentials: 可选；boolean； 表示是否允许发送cookie
+        * Access-Control-Expos-Headers： 可选；指定扩展的header字段
+
++ 非简单请求 一般是特殊要求的请求，put、delete 或者content-type: application/json
+
+### 基本数据类型和引用数据类型的区别
++ 基本数据类型：Number, String, Boolean, Null, Undefined
++ 引用数据类型：Object, Array, Function等
+不同：
++ js中基本数据类型是保存在栈内存(Stack)中；引用数据类型保存在堆内存(Heap)中  
++ 访问机制：基本数据类型可以直接访问；引用数据类型在访问时需要先得到这个对象在堆内存中的地址，再按照这个地址去获得这个对象的值，也就是按引用访问
++ 复制变量(变量赋值)：基本数据在复制时会将原始值的副本给新变量，但是他们俩是完全独立的，只是拥有了相同的value； 引用数据在复制时，原数据会把自身保存的地址赋值给新变量，这两个变量指向了堆内存中的同一个对象
++ 参数传递：基本数据只把变量里的value传递给新参数，新参数和原数据互不影响；引用数据再参数传递时传递的是内存地址
+
+### 变量提升
+var 命令，变量可以在声明之前引用，值为undefined；
+
+### 暂时性死区
+在代码块内, 使用let命令声明变量之前，该变量都是不可用的。在语法上称为暂时性死区
 
 
 

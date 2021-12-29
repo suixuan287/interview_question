@@ -94,8 +94,8 @@ xss分类
 两者都没有命中时，浏览器直接从服务器加载资源数据  
 
 ### 浏览器缓存资源存储
-+ memory cache 存储一些派生类的资源文件，退出进程时数据会被清除，一般存储：脚本、字体、图片
-+ disk cache 存储一些派生类的资源文件，退出进程时数据不会被清除，一般存储非脚本文件：css等
++ memory cache 匹配优先级高；存储一些派生类的资源文件，退出进程时数据会被清除，一般存储：脚本、字体、图片
++ disk cache 匹配优先级低；存储一些派生类的资源文件，退出进程时数据不会被清除，需要进行I/O操作，容量大；一般存储非脚本文件：css等
 
 ### 强缓存
 浏览器在加载资源时，会先根据本地缓存资源的header中的 expires 和 cache-control 判断是否命中强缓存
@@ -108,7 +108,26 @@ cache-control比较常用的设置值：
 no-cache: 需要进行协商缓存，发送请求到服务器确认是否使用缓存  
 no-store: 禁止使用缓存,每一次都要重新请求数据  
 public: 可以被所有的用户缓存，包括终端用户和cdn等中间代理服务器  
+must-revalidate: 如果缓存内容失效，必须去服务器进行重新校验
 
 + cache-control和expires可以在服务端配置同时启用，同时启用时cache-control优先级高
+
+### 协商缓存
+强缓存没有命中时，浏览器会发送一个请求到服务器，服务器会根据header中的部分信息来判断是否命中缓存。如果命中，返回304，告诉浏览器资源未更新，可使用本地缓存  
+header中的信息指：last-Modified/If-Modify-Since 和 ETag/If-None-Match
++ Last-Modify/If-Modify-Since  
+浏览器第一次请求一个资源的时候，服务器返回的header会加上Last-Modify（标识该资源的最后修改时间）  
+当浏览器再次请求该请求时，request header中会包含If-Modify-Since，该值为缓存之前的Last-Modify。服务器收到If-Modify-Since后，会根据资源的最后修改时间判断是否命中缓存  
+如果命中缓存，则返回304，并且不会返回资源内容，并且不会返回last-Modified  
+缺点：  
+短时间资源发生了变化，last-Modified不会发生变化
+
++ ETag/If-None-Match  
+返回一个校验码，ETag可以保证每一个资源是唯一的，资源变化都会导致ETag变化。服务器会根据浏览器上发送的if-None-Match值来判断是否命中缓存  
+当服务器返回304 Not modified的响应时，由于ETag重新生成过了，response header中还会把这个ETag返回，即使没有变化  
+
+ETag可以和Last-Modified一起使用，服务器会优先验证ETag，如果一致 才会对比Last-Modified，最后才决定是否返回304
+
+
 
 
