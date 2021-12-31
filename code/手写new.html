@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            function A (id) {
+                this.id = id;
+                A.prototype.showName = function () {
+                    console.log('my name')
+                }
+            }
+
+
+            function myNew () {
+                const obj = {};
+                const cstFun = [].shift.call(arguments);
+                obj.__proto__ = cstFun.prototype;
+                const param = arguments;
+                cstFun.apply(obj, param)
+                return obj
+            }
+            const new1 = myNew(A, 1)
+            console.log('=======new1', new1)
+
+
+
+            const a2 = new A(2)
+            console.log('------>>>a2', a2)
+        </script>
+    </body>
+</html>
