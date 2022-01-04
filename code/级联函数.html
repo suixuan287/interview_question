@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            function Ai () {
+                this.timer = null
+            }
+            Ai.prototype = {
+                talk () {
+                    this.timer = setTimeout(v => {
+                        console.log('talk')
+                    }, 0)
+                    return this
+                },
+                cancel () {
+                    clearTimeout(this.timer)
+                    return this
+                }
+            }
+            const ai = new Ai();
+            ai.talk().cancel()
+        </script>
+    </body>
+</html>

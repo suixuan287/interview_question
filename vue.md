@@ -86,3 +86,5 @@ ie8以下浏览器不支持
 + vuex
 + inject provide
 + eventBus
+
+### vue解析模板

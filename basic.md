@@ -107,3 +107,34 @@ var 命令，变量可以在声明之前引用，值为undefined；
 3. 组合继承
 4. 寄生组合式继承
 5. class extends
+
+### cookie操作
+document.cookie 获取到一个string
+
+### virtual DOM
+js对象模拟dom树 -> 比较两颗virtual dom树的差异 -> 把差异应用到真正的dom树上
+
+### KVC
+key value coding
+
+### GC
+
+
+### webview
+
+### jscore
+jscore是webkit默认内嵌的js引擎。由Apple用C开发  
+jscore其实就是给APP提供了一个js可以解释执行的运行环境与资源  
+分为JSContext, JSManagedValue, JSValue, JSVirtualMachine(JSVM)  
++ JSContext  
+一个jsContext表示一次js的执行环境（执行上下文）。所有的js代码都必须在一个jsContext中执行。  
+可以通过创建一个jsContext去调用js脚本，访问一些js定义的值和函数，同时也提供了让js访问native对象、方法的接口  
++ JSManagedValue
++ JSValue
++ JsVirtualMachine JSVM js虚拟机  
+jsvm主要做两个事情
+    - 把js代码编译成byteCode(字节码)
+    - 解释器：运行js编译生成的byteCode（字节码）
+    - runtime(运行时): 负责运行时的内存空间开辟、管理等 
++ JSExport
+实现jsExport协议可以开放oc类和他们的实例方法、类方法、属性给js调用。只有在jsExport里面开放的方法js才能调用
