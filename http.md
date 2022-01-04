@@ -66,7 +66,8 @@
   
 防御方法：  
 表单提交中增加hash值，服务端进行hash验证  
-图片随机字符验证
+图片随机字符验证  
+使用token，服务端给用户生成一个token，加密后传递给用户，用户提交时需要携带这个token
 
 
 ### xss 跨站脚本漏洞
@@ -82,7 +83,8 @@ xss分类
 
 防御：
 + 特殊字符转换
-+ 对敏感的cookie设置http-only限制，让js获取不到cookie内容
++ 对敏感的cookie设置http-only限制，让js获取不到cookie内容  
+response.addHeader("Set-Cookie", "uid=112; Path=/; HttpOnly")
 
 ### 浏览器缓存原理
 分为强缓存和协商缓存  
