@@ -9,14 +9,35 @@
         <script>
             class MyPromise {
                 constructor (func) {
-                    
+                    console.log('======>>>>', arguments)
+                    this.resolve1 = arguments[0];
+                    this.reject1 = arguments[1];
+                    try {
+                        func(...arguments)
+                    } catch (e) {
+                        return
+                    }
                 }
 
-                then1() {
+                then1(thencb) {
+                    console.log('then1', arguments)
+                    thencb()
+                    return this
+                }
 
+                catch1 () {
+                    console.log('catch1')
+                    return this
                 }
             }
 
+            const my = new MyPromise((resolve1, reject1) => {
+                resolve1(2)
+                console.log(1)
+            })
+            my.then1(res => {
+                console.log('my then 1', res)
+            })
         </script>
     </body>
 </html>
