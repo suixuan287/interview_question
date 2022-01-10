@@ -88,3 +88,41 @@ ie8以下浏览器不支持
 + eventBus
 
 ### vue解析模板
+1. parse: 解析template中的内容转化为AST(抽象语法树)  
+用正则等方式解析template模板中的指令、class、style等数据
+2. optimize: 优化AST：检测不需要进行DOM改变的静态子树
+    + 将静态子树变成常数，
+    + 在patch的过程中直接跳过
+主要作用是标记static静态节点，后面当update更新界面时，会有一个patch的过程，diff算法会直接跳过静态节点，减少比较的过程，优化patch的性能
+3. generate: 根据AST生成所需的code(包含render和staticRenderFns)  
+generate是将AST转化成render function字符串的过程，得到的是render的字符串以及staticRenderFns字符串
+
+### VNODE
+将DOM抽象成一个以js对象为节点的虚拟dom树，以VNode节点模拟真实DOM，可以对这颗抽象树进行创建、删除、修改等操作对节点进行操作。修改以后警告diff算法得出一些需要修改的最小单位，再将这些小单位的视图进行更新。  
+VNode包含以下数据：  
++ tag 当前节点的标签名
++ text 当前节点文本
++ elm 当前虚拟节点对应的真实dom节点
++ children 当前节点的子节点，是一个数组
++ key 节点的key属性，被当做节点的标志，应以优化
++ parent 当前节点的父节点
++ isStatic 是否为静态节点
++ isComment 是否为注释节点
++ isRootInsert 是否作为根节点插入  
+...
+
+### patch
+patch的核心：diff算法。diff算法是通过同层的树节点进行比较而非对树进行逐层搜索遍历的方式，所以时间复杂度只有O(n)，是一种相当高效的算法。  
+在patch的过程中，如果两个VNode被认为是同一个VNode(sameVNode),则会进行深度的比较，得出最小差异，否则直接删除旧有的DOM节点，创建新的DOM节点。  
++ 如果新旧VNode都是静态的，同时他们的key相同(代表同一节点)，并且新的VNode是clone或者标记了once，那么只需要替换elm一级componentInstance即可
++ 新老节点均有子节点，则对子节点进行diff操作，调用updateChildren，这个updateChildren也是diff的核心
++ 如果老节点没有子节点而新节点存在子节点，先清空老节点DOM的文本内容，然后为当前DOM节点接入子节点
++ 当新节点没有子节点而老节点有子节点时，移除该DOM节点的所有子节点
++ 当新老节点都没有子节点时，只是文本的替换
+
+### sameVNode
++ key相同
++ tag
++ isComment
++ 是否data
++ 标签是input的时候，type必须相同

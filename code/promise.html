@@ -9,34 +9,49 @@
         <script>
             class MyPromise {
                 constructor (func) {
-                    console.log('======>>>>', arguments)
-                    this.resolve1 = arguments[0];
-                    this.reject1 = arguments[1];
+                    this.status = 'pending';
+                    this.succMsg = '';
+                    this.failMsg = ''
+
                     try {
-                        func(...arguments)
+                        func(this.resolve1.bind(this), this.reject1.bind(this))
                     } catch (e) {
-                        return
+                        this.failMsg = e
+                        this.catch1()
                     }
                 }
 
-                then1(thencb) {
-                    console.log('then1', arguments)
-                    thencb()
+                resolve1 (res) {
+                    this.status = 'resolve';
+                    this.succMsg = res
+                }
+
+                reject1 (res) {
+                    this.status = 'reject';
+                    this.failMsg = res
+                }
+
+                then1 () {
+                    if (this.status === 'resolve') {
+                        arguments[0](this.succMsg)
+                    } else if (this.status === 'reject' && arguments[1]) {
+                        arguments[1](this.msg)
+                    }
                     return this
                 }
 
                 catch1 () {
-                    console.log('catch1')
-                    return this
+                    arguments[0](this.failMsg)
                 }
             }
 
-            const my = new MyPromise((resolve1, reject1) => {
-                resolve1(2)
-                console.log(1)
-            })
-            my.then1(res => {
-                console.log('my then 1', res)
+            new MyPromise((resolve1, reject1) => {
+                console.log('new mypro')
+                setTimeout(v => {
+                    resolve1(2)
+                }, 2000)
+            }).then1(res => {
+                console.log('>>>>>>>', res)
             })
         </script>
     </body>
