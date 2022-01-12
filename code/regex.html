@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            const date = '2021-02-29';
+            const dateRegex = /^([0-9]{4})-(0[0-9]|1[0-2])-(((0|1|2)[0-9])|3[01])$/
+            console.log(dateRegex.test(date))
+            console.log(date.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3'))
+            console.log(date.replace(/(\d{4})-(\d{2})-(\d{2})/, () => `${RegExp.$1}/${RegExp.$2}/${RegExp.$3}`))
+            const dateFullRegex = /\d{4}(-|\.|\/)\d{2}\1\d{2}/
+            console.log(dateFullRegex.test(date))
+
+            const zs = 'Zhangsan(张三) ';
+            const enReg = /[a-zA-Z]/g;
+            const cnReg = /[^a-zA-Z\(\)]/g
+            const enWord = zs.match(enReg).join('');
+            const cnWord = zs.match(cnReg).join('').trim();
+            console.log('----->>>', enWord, cnWord)
+
+            const html = '<div id="app" class="main"></div>';
+            const htmlReg = /id=".*?"/;
+            const noidReg = /id="/
+            console.log('--------', html.match(htmlReg)[0])
+
+            var helloResult = /^^hello?$/.test("hello");
+            console.log(helloResult) // true
+
+            // 不匹配任何东西的正则
+            const nothingReg = /.^/
+
+            var result = "hello".replace(/(?=l)/g, '#');
+            console.log(result); 
+            // => "he#l#lo"
+            const num = '123456789';
+            console.log(num.replace(/(?!^)(?=(\d{3})+$)/g, ','));
+
+            const gr = 'I? love ?? the ?great ? ?wall in ?beijing';
+            console.log(gr.replace(/\?(\w)/g, (m, p1) => p1.toUpperCase()).replace(/(\?)/g, '').replace(/\s\s/g, ' '))
+
+            // 大写转中划线
+            const mz = 'WebkitTransform';
+            console.log(mz.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`))
+
+
+        </script>
+    </body>
+</html>
