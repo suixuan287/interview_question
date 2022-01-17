@@ -319,3 +319,42 @@ babel配置方法：
 当一个DOM元素接收到事件的时候，会把它接收到的事件传给自己的父级，一直到window。  
 ps: 传递的仅仅是事件，并不传递所绑定的事件函数，如果父级没有绑定函事件函数，传递也无任何表现  
 阻止事件冒泡： e.stopPropagation()
+
+### 错误类型
++ Error 主要用于自定义异常的基础对象
++ AggregateError 
++ EvalError eval函数的错误
++ InternalError js内部引擎的错误
++ RangeError 一个值超出允许的范围或集合中
++ ReferenceError 当一个不存在的变量被引用发生的错误
++ SyntaxError 语法解析时，代码不合法时发生的错误
++ TypeError 值的类型非预期类型时发生的错误
++ UriError 使用uri处理函数发生的错误 encodeUri、decodeUri...
+
+### for…of Iterator
+Iterator是一种接口，为不同的数据结构提供同一的访问机制。iterator主要为for of服务。  
+拥有iterator属性的数据结构：  
++ 数组 Array
++ Map
++ Set
++ String
++ arguments对象
++ Nodelist对象, 就是获取的dom列表集合  
+使对象也可以使用for of
+```
+     const obj = {
+        a: 1,
+        b: 2,
+        c: 3
+    }
+
+    for (let i of Object.values(obj)) {
+        console.log(i)
+        // 1
+        // 2
+        // 3
+    }
+
+    otherway: obj[Symbol.iterator] = Array.prototype[Symbol.iterator];  
+    // 如果不指定Symbol.iterator会报错，obj is not iterable
+```
