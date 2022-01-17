@@ -12,15 +12,16 @@
             const newArr = Array(11);
             const lostArr = [];
             for (let i = 0; i < n - 3; i++) {
+                console.log('iii', oldArr[i])
                 newArr[oldArr[i]] = 1
             }
-            console.log('-----', newArr)
+            console.log('-----newArr', newArr)
             for (let i = 0; i < newArr.length; i++) {
                 if (!newArr[i]) {
                     lostArr.push(i)
                 }
             }
-            lostArr.shift(0)
+            lostArr.shift()
             console.log('tttt', Date.now() - now)
             console.log('----->>>', lostArr)
         </script>

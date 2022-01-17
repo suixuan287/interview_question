@@ -14,10 +14,12 @@
                 }
             }
 
-
+            // apply 数组
+            // call 多个参数
             function myNew () {
+                console.log('mm', arguments)
                 const obj = {};
-                const cstFun = [].shift.call(arguments);
+                const cstFun = [].shift.apply(arguments);
                 obj.__proto__ = cstFun.prototype;
                 const param = arguments;
                 cstFun.apply(obj, param)

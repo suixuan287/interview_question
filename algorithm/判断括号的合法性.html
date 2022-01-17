@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            function isValid (str) {
+                const obj = {
+                    '(': ')',
+                    '[': ']',
+                    '{': '}'
+                }
+                const temp = [];
+                for (let i = 0; i < str.length; i++) {
+                    if (obj[str[i]]) {
+                        console.log('=====', temp, i)
+                        temp.push(str[i])
+                    } else if(str[i] !== obj[temp[temp.length - 1]]) {
+                        return false
+                    } else {
+                        temp.pop()
+                    }
+                }
+                return !temp.length
+            }
+            const a = '{}(([{}]))[]'
+            console.log(isValid(a))
+        </script>
+    </body>
+</html>
