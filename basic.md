@@ -358,3 +358,25 @@ Iterator是一种接口，为不同的数据结构提供同一的访问机制。
     otherway: obj[Symbol.iterator] = Array.prototype[Symbol.iterator];  
     // 如果不指定Symbol.iterator会报错，obj is not iterable
 ```
+### 尾递归
+当函数A的最后一个动作是调用函数b，b的调用形式就是尾调用。
+```
+    const a = () => {
+        b()
+    }
+```
+b的调用不是尾调用，因为隐式地执行了
+```
+    const a = () => {
+        b();
+        return undefined;
+    }
+```
+尾递归也是一样
+```
+    const sum = (n, prevSum = 0) => {
+        if (n <= 1) return n + prevSum;
+        return sum(n-1, n + prevSum)
+    }
+```
+尾递归优化：Trampoline

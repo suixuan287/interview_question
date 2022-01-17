@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            const n = 5;
+            function foo(n) {
+                if (n === 1 || n === 2) {
+                    return n
+                } else {
+                    return foo(n-1) + foo(n-2)
+                }
+            }
+            console.log('------>>>', foo(n))
+            // 1
+            // 11 2
+
+            // 1111 112 121 211 22 
+            // 11111 1112 1121 1211 122 2111 221 212  
+        </script>
+    </body>
+</html>
