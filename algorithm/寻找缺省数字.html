@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            const now = Date.now()
+            var n = 10;
+            const oldArr = [5,1,6,7,8,3,10];
+            const newArr = Array(11);
+            const lostArr = [];
+            for (let i = 0; i < n - 3; i++) {
+                newArr[oldArr[i]] = 1
+            }
+            console.log('-----', newArr)
+            for (let i = 0; i < newArr.length; i++) {
+                if (!newArr[i]) {
+                    lostArr.push(i)
+                }
+            }
+            lostArr.shift(0)
+            console.log('tttt', Date.now() - now)
+            console.log('----->>>', lostArr)
+        </script>
+    </body>
+</html>

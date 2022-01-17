@@ -319,3 +319,26 @@ babel配置方法：
 当一个DOM元素接收到事件的时候，会把它接收到的事件传给自己的父级，一直到window。  
 ps: 传递的仅仅是事件，并不传递所绑定的事件函数，如果父级没有绑定函事件函数，传递也无任何表现  
 阻止事件冒泡： e.stopPropagation()
+
+### 尾递归
+当函数A的最后一个动作是调用函数b，b的调用形式就是尾调用。
+```
+    const a = () => {
+        b()
+    }
+```
+b的调用不是尾调用，因为隐式地执行了
+```
+    const a = () => {
+        b();
+        return undefined;
+    }
+```
+尾递归也是一样
+```
+    const sum = (n, prevSum = 0) => {
+        if (n <= 1) return n + prevSum;
+        return sum(n-1, n + prevSum)
+    }
+```
+尾递归优化：Trampoline

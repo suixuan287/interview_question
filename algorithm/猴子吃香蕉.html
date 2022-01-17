@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            // chunk([1,2,3,4],2)=[[1,2],[3,4]];
+            // chunk([1,2,3,4,5],2)=[[1,2],[3,4],[5]];
+            function chunk(arr, size) {
+                const a = [];
+                const b = arr.length / size;
+                for (let i = 0; i < b; i++) {
+                    a.push(arr.slice(size * i, size * (i + 1)))
+                }
+                return a
+            }
+            console.log(chunk([1,2,3,4,5], 2))
+        </script>
+    </body>
+</html>

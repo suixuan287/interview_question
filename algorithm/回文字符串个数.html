@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <input id="input"/>
+        <div id="div"></div>
+        <script>
+            // 判断是否回文字符串
+            function  isPalindrome(str) {
+                return Array.from(str).reverse().join('') === str
+            }
+            // 判断字符串中的所有回文字符串
+            function palindrome(str) {
+                let temp = '';
+                const result = [];
+                for (let i = 0; i < str.length; i++) {
+                    temp = 0;
+                    for(let j = 0; j < str.length; j++){
+                        temp += str.charAt(j);
+                        if (isPalindrome(temp) && !result.includes(temp)) {
+                            result.push(temp)
+                        }
+                    }
+                }
+                return result
+            }
+            // 判断字符串中最长的回文字符串
+            function palindromeLong(str) {
+                let temp = '';
+                let longStr = '';
+                for(let i = 0; i < str.length; i++) {
+                    temp = 0;
+                    for(let j = 0; j < str.length; j++) {
+                        temp += str.charAt(j)
+                        if (isPalindrome(temp) && longStr.length > temp.length) {
+                            longStr = temp
+                        }
+                    }
+                }
+                return longStr
+            }
+        </script>
+    </body>
+</html>
