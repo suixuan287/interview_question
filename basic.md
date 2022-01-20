@@ -122,6 +122,42 @@ key value coding
 
 
 ### webview
+webview是一种嵌入式浏览器，原生应用可以用它来展示网络内容  
+webview中的js和app交互的方式有两种：
+
++ javascript bridge  
+native中打开webview页面，会在window下注入一个bridge对象，提供各种与native交互的方法。  
+ios端主要使用WebviewJavascriptBridge来注册  
+android端主要使用AddJavascriptInterface来注册
+jsBridge只能在native中使用  
++ schema url  
+schema url不仅可以在native中使用，也可以跨app使用。  
+schema url类似一个伪协议的链接(统跳协议)： schema://path?param=abc  
+在webview中，当m页发起schema请求时，native端会进行捕获。  
+我自己写了小工具，在mac上通过simulator唤起测试版安装包来打开h5页面。xcrun simctl openurl booted openapp.jdpingou://m.jingxi.com  
+
+
+### webview页面加载优化
+webview页面加载过程  
+webview初始化 --->  静态资源(html/js/css...)下载 ---> API调用  ---> 渲染  
+     30%                   30%-40%                    15%        10%  
+次级页面优化方案是链接预取(link prefetching):
+```
+    <link rel="prefetch" href="xxx.js" />
+    <link rel="prefetch" href="xxx.css" />
+    <link rel="prefetch" href="xxx.img" /> 
+```
+优化方案：  
++ 隐藏webview模块  
+在native页面新增一个不可见的webview组件，打开预加载器模块h5页面
++ 预加载器模块  
+    - 请求服务端接口，获取需要预加载的静态资源url列表
+    - 调用浏览器fetch方法，下载列表中的静态资源，存储到webview HTTP缓存区
+    - 静态资源下载完毕后，通知native销毁隐藏webview  
+
+HTML通常设置为不缓存，每次请求都会从服务端获取最新内容。要实现页面离线化：  
++ 对html文档增加版本号，并将带版本号的入口地址url传给服务端入口配置系统更新
++ 针对带版本号的主文档，设置长期缓存： cache-control: public, max-age: 3600 * 24 * 365, s-maxage=3600 * 24 * 365, immutable
 
 ### jscore
 jscore是webkit默认内嵌的js引擎。由Apple用C开发  
@@ -391,3 +427,4 @@ b的调用不是尾调用，因为隐式地执行了
     }
 ```
 尾递归优化：Trampoline
+
