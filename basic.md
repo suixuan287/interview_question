@@ -428,3 +428,31 @@ b的调用不是尾调用，因为隐式地执行了
 ```
 尾递归优化：Trampoline
 
+### 前端监控
++ 阿里云ARMS
++ 听云
++ 监控宝
+### 前端优化
++ 资源优化  
+    - 使用Brotli;一种开源的无损数据格式
+    - 图片压缩
+        * 使用mozJPEG或Gutzli压缩jpeg
+        * 使用pingo压缩png
+        * 图片懒加载
+    - 将字体缓存在Service Worker中
++ 构建优化
+    - tree-shaking
+    - scope hoisting
+    - code-splitting: 可以将代码拆分为按需分配的chunk。可以让浏览器保持较小的初始下载量，在应用程序请求时按需请求代码。
+    - preload-webpack-plugin: 可以根据你代码的分隔方式，让浏览器使用<link rel="preload"/>或<link rel="prefetch"/>对分隔的代码chunk进行预加载
+    - 将有繁重计算的js抽离到web Worker或通过service Worker进行缓存
++ 传输优化
++ 网络优化
+    - CDN加载
+
+### WASM
+
+### 页面重新渲染
++ 修改DOM
++ 修改样式
++ 用户事件
