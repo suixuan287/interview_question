@@ -131,3 +131,108 @@ patch的核心：diff算法。diff算法是通过同层的树节点进行比较�
 1. 组件的参数和方法不共享
 2. 和组件的方法冲突时会被组件中的方法覆盖
 3. 生命周期(created, mounted)中的代码会和组件中的生命周期中的代码合并执行
+
+### $props、$attrs和$listeners
+#### $props
+当前组件接收到的props对象。vue实例代理了其对props对象属性的访问
+
+#### $attrs
+包含了父作用域中不作为被prop识别(且获取)的特性绑定(不包含class和style)
+
+#### $listeners
+包含了父作用域中(不含.native修饰器)v-on事件监听器。可以通过"v-on='$listeners'"传入内部组件---在创建更高的层次的组件时使用
+
+
+### vue3和vue2
++ 生命周期：  
+    vue3：大部分生命周期函数加上“on”前缀；生命周期函数需要提前引入  
+    vue2：直接引入  
+    tips：setup是围绕beforeCreate和created生命周期钩子运行的，不需要显式地去定义
+
++ 多根节点
+    vue3：支持多根节点(fragment)  
+    vue2：多节点会报错
+
++ 组合式API
+    vue3：组合式api，可将同一逻辑的内容写到一起，增强可读性、内聚。
+    vue2：选项式api
+
++ 异步组件
+    vue3：suspense组件，允许程序在等待异步组件加载完成之前渲染兜底的内容。使用之前需要在模板中声明，包括两个命名插槽：default和fallback。  
+    fallback：加载状态
+    ```html
+        <suspense>
+            <template #default>
+            <List />
+            </template>
+            <template #fallback>
+            <div>
+                Loading...
+            </div>
+            </template>
+        </suspense>
+    ```
+
++ Teleport
+    vue3：可将部分DOM移动到Vue app之外的位置。
+
+    ```html
+        <button @click="dialogVisible = true">显示弹窗</button>
+            <teleport to="body">
+            <div class="dialog" v-if="dialogVisible">
+                我是弹窗，我直接移动到了body标签下
+            </div>
+        </teleport>
+    ```
+
++ 响应式原理
+    vue3：proxy 对象代理  
+    vue2：Object.definepProperty对象劫持    
+    Object.defineProperty无法监听对象或数组新增、删除的元素
+
++ 虚拟dom
+    vue3：增加patchFlag字段：  
+    1：代表动态文本节点。在diff过程中，只需要对比文本内容，无需关注class、style等
+    -1：代表静态节点，都保存为一个变量进行静态提升，在重新渲染时直接引用，无需重新创建
+
++ 事件缓存
+    vue3的cacheHandler可在第一次渲染后缓存我们的事件。相对于vue无需每次渲染都传递一个新的函数，加一个click事件
+
++ Diff算法优化
+    patchFlag帮助diff时区分静态节点，以及不同类型的动态节点。一定程序减少节点本身及其属性的对比时间
+
++ 打包优化
+    tree-shaking  
+    vue3针对全局和内部API进行了重构，对tree-shaking进行支持。全局API只能作为ES模块构建的命名导出进行访问。
+    ```JS
+        import { nextTick } from 'vue';   // 显式导入
+        nextTick(() => {
+        // 一些和DOM有关的东西
+            });
+    ```
+    受影响的全局API
+        - Vue.nextTick
+        - Vue.observable （用 Vue.reactive 替换）
+        - Vue.version
+        - Vue.compile （仅全构建）
+        - Vue.set （仅兼容构建）
+        - Vue.delete （仅兼容构建）
+
++ Typescript支持
+    vue3由ts重写，相对于vue2可以更好地支持ts，ts是一种类型系统，面向对象的语法  
+    vue2：Option API中option是个简单对象，不是特别匹配  
+    vue3：
+         
+
+### vue为什么不能使用index作为key
+key是给每一个vnode的唯一id，可以依靠key更准确更快地拿到old vnode中对应的vnode节点，高效地更新vdom  
+如果删除数组中的某一个元素，那么这个元素后的所有元素的index都会发生改变，与之对应key也会发生改变。
+
+### scoped css可以影响子组件
+使用>>> 
+```css
+    .a >>> b {...}
+```
+
+### v-show 是不是重排
+是的。因为v-show改变了display属性。当渲染树中的一部分，因为元素的尺寸，布局，隐藏等改变而需要重新构建
